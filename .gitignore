@@ -38,7 +38,6 @@ obj/
 *.exe
 *.out
 *.app
-*.i*
 *.dSYM/
 *.map
 *.pdb
