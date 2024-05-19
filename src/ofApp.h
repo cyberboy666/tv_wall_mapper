@@ -17,8 +17,11 @@ class ofApp : public ofBaseApp{
         void keyPressed(ofKeyEventArgs& keyArgs);
         void keyReleased(ofKeyEventArgs& keyArgs);
         void drawWindow(ofEventArgs &args);
+        void mousePressedWindow(ofMouseEventArgs &args);
+        void exitWindow(ofEventArgs &args);
         void mousePressed(int x, int y, int button);
         void mouseDragged(int x, int y, int button);
+        void exit();
 
     void jsonLoad(string path);
     void createInputsAndOutputsList();
@@ -30,6 +33,7 @@ class ofApp : public ofBaseApp{
     int getLayoutIndex();
     void loadShader(int item_current);
     void loadInput();
+    void toggleFullscreen();
 
 
     #ifdef PROJECT_TARGET_OPENGLES
@@ -54,7 +58,6 @@ class ofApp : public ofBaseApp{
     string glType;
 
 	// data in config
-    bool hideConfig=false;
     bool hideMaptest = false;
     bool hidePreview = false;
     bool setResolutions = false;

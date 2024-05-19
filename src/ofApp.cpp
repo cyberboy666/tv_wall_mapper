@@ -98,7 +98,7 @@ void ofApp::createInputsAndOutputsList(){
 
     vector<ofVideoDevice> devices = vidGrabber.listDevices();
     for(size_t i = 0; i < devices.size(); i++){
-        if(devices[i].bAvailable){
+        if(devices[i].bAvailable && devices[i].deviceName.find("broadcom") ==  std::string::npos){
             //log the device
             inputType videoInput;
             videoInput.type = "VIDEO";
@@ -190,9 +190,28 @@ void ofApp::createMonitor(int dataListIndex){
             monitorDataList[dataListIndex].window->setVerticalSync(false);
             ofAppGLFWWindow* win;
             win = dynamic_cast<ofAppGLFWWindow *> (monitorDataList[dataListIndex].window.get());
-            win->setWindowIcon("icon.png");
-            win->setWindowTitle("TV_WALL_MAPPER");
+
+            win->setWindowTitle("TV_WALL_MAPPER - MONITOR " + ofToString(dataListIndex));
+
+            #if defined(TARGET_WIN32)
+                HICON hWindowIcon = NULL;
+                HICON hWindowIconBig = NULL;
+                HWND hwnd = win->getWin32Window();
+                string stricon = "data/icon.ico";
+
+                if (hWindowIcon != NULL) DestroyIcon (hWindowIcon);
+                if (hWindowIconBig != NULL) DestroyIcon (hWindowIconBig);
+                hWindowIcon = (HICON) LoadImageA (GetModuleHandle (NULL), stricon.c_str (), IMAGE_ICON, 16, 16, LR_LOADFROMFILE);
+                hWindowIconBig = (HICON) LoadImageA (GetModuleHandle (NULL), stricon.c_str (), IMAGE_ICON, 32, 32, LR_LOADFROMFILE);
+                SendMessage (hwnd, WM_SETICON, ICON_SMALL, (LPARAM) hWindowIcon);
+                SendMessage (hwnd, WM_SETICON, ICON_BIG, (LPARAM) hWindowIconBig);
+            #elif defined(TARGET_LINUX)
+                win->setWindowIcon("icon.png");
+            #endif
+
             ofAddListener(monitorDataList[dataListIndex].window->events().draw, this, &ofApp::drawWindow);
+            ofAddListener(monitorDataList[dataListIndex].window->events().mousePressed, this, &ofApp::mousePressedWindow);
+            ofAddListener(monitorDataList[dataListIndex].window->events().exit, this, &ofApp::exitWindow);
         }
 
 
@@ -321,15 +340,36 @@ void ofApp::draw(){
     window_flags |= ImGuiWindowFlags_NoDocking;
     // window_flags |= ImGuiWindowFlags_UnsavedDocument;
 
-    if(!hideConfig){
+
     gui.begin();
         const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
         ImGui::SetNextWindowPos(ImVec2(main_viewport->WorkPos.x, main_viewport->WorkPos.y), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(550, ofGetWindowHeight() - 150), ImGuiCond_FirstUseEver);
         ImGui::Begin("TV_WALL_MAPPER SETTINGS", NULL, window_flags);
+
+        if (ImGui::CollapsingHeader("HELP")){
+            ImGui::Text("MAPPING WITH A MOUSE:");
+            ImGui::BulletText("CLICK on a TV to select it (RED is selected)");
+            ImGui::BulletText("CLICK and drag a TV to position");
+            ImGui::BulletText("hold SHIFT and drag to resize it");
+            ImGui::BulletText("or RIGHT CLICK and drag to resize it");
+            ImGui::Separator();
+            ImGui::Text("MAPPING WITH A KEYBOARD:");
+            ImGui::BulletText("press ALT plus LEFT/RIGHT to select a TV");
+            ImGui::BulletText("press ARROW KEYS to position it");
+            ImGui::BulletText("press SHIFT plus ARROW KEYS to resize it");
+            ImGui::BulletText("press ALT plus UP/DOWN to set grid size (how much each press moves)");
+            ImGui::Separator();
+            ImGui::BulletText("NOTE: TVs with width less than height are automatically rotated");
+            ImGui::BulletText("NOTE: resizing can be negative to support all possible orientations");
+            ImGui::Separator();
+            ImGui::Text("OTHER KEYBOARD SHORTCUTS:");
+            ImGui::BulletText("press F to toggle ON/OFF FULLSCREEN");
+            ImGui::BulletText("press R to toggle ON/OFF FPS ON OUTPUT");
+        }
+
         ImGui::SeparatorText("MODE SETTING");
 
-        ImGui::Checkbox("hide this config (press c)", &hideConfig);
         if(ImGui::Button("save config")){
             jsonSave();
         }
@@ -601,7 +641,6 @@ void ofApp::draw(){
 
         ImGui::End();
     gui.end();
-    }
 }
 
 int ofApp::getLayoutIndex(){
@@ -669,6 +708,32 @@ void ofApp::drawWindow(ofEventArgs &args) {
         monitorDataList[i].fbo.draw(0,0, monitorDataList[i].window->getWidth(),monitorDataList[i].window->getHeight());
     }
     drawFramerate();
+}
+
+void ofApp::mousePressedWindow(ofMouseEventArgs &args) {
+
+    int i = -1;
+    for (int j = 0; j < monitorDataList.size(); ++j) {
+        if (monitorDataList[j].window.get() == ofGetWindowPtr()) {
+            i = j; // Found the index
+            break;
+        }
+    }
+
+    if(args.button == 1){toggleFullscreen();}
+}
+
+void ofApp::exitWindow(ofEventArgs &args) {
+
+    int i = -1;
+    for (int j = 0; j < monitorDataList.size(); ++j) {
+        if (monitorDataList[j].window.get() == ofGetWindowPtr()) {
+            i = j; // Found the index
+            break;
+        }
+    }
+
+    monitorDataList[i].outputToMonitor = false;
 }
 
 void ofApp::drawFramerate(){
@@ -774,17 +839,8 @@ void ofApp::keyPressed(ofKeyEventArgs& keyArgs){
         else{ grid_index--; }
     }
 
-    if (keyArgs.key == 'c' || keyArgs.key == 'C') {
-        hideConfig = !hideConfig;
-    }
     if (keyArgs.key == 'f' || keyArgs.key == 'F') {
-        monitorDataList[monitorSelected].isFullscreen = !monitorDataList[monitorSelected].isFullscreen;
-        if(monitorDataList[monitorSelected].outputToMonitor){
-                monitorDataList[monitorSelected].window->setFullscreen(monitorDataList[monitorSelected].isFullscreen);
-        }
-        else if(numberMonitors == 1 && !monitorDataList[monitorSelected].outputToMonitor){
-            ofSetFullscreen(monitorDataList[monitorSelected].isFullscreen);
-        }
+        toggleFullscreen();
     }
     if (keyArgs.key == 'r' || keyArgs.key == 'R') {
         showFramerate = !showFramerate;
@@ -815,6 +871,10 @@ void ofApp::keyReleased(ofKeyEventArgs& keyArgs) {
 }
 
 void ofApp::mousePressed(int x, int y, int button) {
+    if(button == 1){
+        toggleFullscreen();
+        return;
+    }
     if(hideMaptest){return;}
     ofRectangle fboBounds(600, 20, ofGetScreenWidth() / 3, ofGetScreenHeight() / 3);
     if (!fboBounds.inside(x, y)) {
@@ -848,21 +908,30 @@ void ofApp::mouseDragged(int x, int y, int button) {
     float xPos = static_cast<float>(x - 600) / (ofGetScreenWidth() / 3) * canvasWidth;
     float yPos = static_cast<float>(y - 20) / (ofGetScreenHeight() / 3) * canvasHeight;
 
-    if(!shiftPressed){
+    if(!(shiftPressed || button == 2)){
         tvDataList[monitorDataList[monitorSelected].tvFocus-1].xPos = (xPos - lastMouseXPos);
         tvDataList[monitorDataList[monitorSelected].tvFocus-1].yPos = (yPos - lastMouseYPos);
     }
-    else if(shiftPressed){
+    else if(shiftPressed || button == 2){
         tvDataList[monitorDataList[monitorSelected].tvFocus-1].width = xPos - tvDataList[monitorDataList[monitorSelected].tvFocus-1].xPos;
         tvDataList[monitorDataList[monitorSelected].tvFocus-1].height = yPos - tvDataList[monitorDataList[monitorSelected].tvFocus-1].yPos;
     }
 
 }
 
+void ofApp::toggleFullscreen(){
+    monitorDataList[monitorSelected].isFullscreen = !monitorDataList[monitorSelected].isFullscreen;
+    if(monitorDataList[monitorSelected].outputToMonitor){
+            monitorDataList[monitorSelected].window->setFullscreen(monitorDataList[monitorSelected].isFullscreen);
+    }
+    else if(numberMonitors == 1 && !monitorDataList[monitorSelected].outputToMonitor){
+        ofSetFullscreen(monitorDataList[monitorSelected].isFullscreen);
+    }
+}
+
 void ofApp::jsonLoad(string path){
     if (json.open(path)) {
         // Access configuration values
-        hideConfig = json["hide_config"].asBool();
         hideMaptest = json["hide_maptest"].asBool();
         hidePreview = json["hide_preview"].asBool();
         setResolutions = json["set_resolutions"].asBool();
@@ -904,7 +973,6 @@ void ofApp::jsonLoad(string path){
 }
 
 void ofApp::jsonSave(){
-        json["hide_config"] = hideConfig;
         json["hide_maptest"] = hideMaptest;
         json["hide_preview"] = hidePreview;
         json["set_resolutions"] = setResolutions;
@@ -938,4 +1006,16 @@ void ofApp::jsonSave(){
         }
 
         json.save("config.json", true);
+}
+
+void ofApp::exit(){
+    ofLog() << "called on exit now ..";
+    
+    for (int i = 0; i < monitorDataList.size(); ++i) {
+        if(monitorDataList[i].outputToMonitor){
+            monitorDataList[i].window->setWindowShouldClose();
+        }
+    }
+    ofSleepMillis(100);
+    ofLog() << "got to here...";
 }
