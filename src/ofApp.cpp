@@ -229,10 +229,6 @@ void ofApp::drawBoxAndLabel(int xPosRaw, int yPosRaw, int widthRaw, int heightRa
             ofRotateDeg(90);
             ofTranslate(-45,5);
             }
-        // if(widthRaw < heightRaw){
-        //     ofRotate(90);
-        //     ofTranslate(-170, 25);
-        // }
         font.drawString(text, 0, 0);
     ofPopMatrix();
 
@@ -570,7 +566,12 @@ void ofApp::draw(){
         ImGui::InputInt("CANVAS WIDTH (mm)", &canvasWidth);
         ImGui::InputInt("CANVAS HEIGHT (mm)", &canvasHeight);
 
+        ImGui::SeparatorText("CANVAS VALUES");
 
+        if(ImGui::InputInt("SELECTED TV", &monitorDataList[monitorSelected].tvFocus)){
+            if(monitorDataList[monitorSelected].tvFocus > numberTVs){monitorDataList[monitorSelected].tvFocus = 0;}
+            else if(monitorDataList[monitorSelected].tvFocus < 0){monitorDataList[monitorSelected].tvFocus = numberTVs;}
+        }
         ImGui::Combo("GRID SIZE (mm)", &grid_index, grid_options, IM_ARRAYSIZE(grid_options));
 
         ImGui::SeparatorText("TV VALUES");
@@ -794,21 +795,6 @@ void ofApp::keyPressed(ofKeyEventArgs& keyArgs){
         ofLog() << "window size: " << monitorDataList[0].window->getWindowSize();
         ofLog() << "screen size: " << monitorDataList[0].window->getScreenSize();
     }
-    if (keyArgs.key == 'n' || keyArgs.key == 'N') {
-        ndiReceiver.ReceiveImage(ndiTexture);
-        int nsenders = ndiReceiver.GetSenderCount();
-        ofLog() << "ndiReceiver.GetSenderCount(): " << ndiReceiver.GetSenderCount();
-        ofLog() << "ndiReceiver.ReceiverCreated(): " << ndiReceiver.ReceiverCreated();
-        for(int i = 0; i < nsenders; i++){
-            inputType ndiInput;
-            ndiInput.type = "NDI";
-            ndiInput.typeId = i; 
-            // char name[256];
-            // ndiReceiver.GetSenderName(name, 256, i);
-            ndiInput.name = "NDI_" + ofToString(i) + " : " + ndiReceiver.GetSenderName(i);
-            videoInputs.push_back(ndiInput);
-        }
-    }
 }
 
 void ofApp::keyReleased(ofKeyEventArgs& keyArgs) {
@@ -832,7 +818,6 @@ void ofApp::mousePressed(int x, int y, int button) {
     if(hideMaptest){return;}
     ofRectangle fboBounds(600, 20, ofGetScreenWidth() / 3, ofGetScreenHeight() / 3);
     if (!fboBounds.inside(x, y)) {
-        monitorDataList[monitorSelected].tvFocus = 0;
         return; 
         }
     float max_canvas = static_cast<float>MAX(canvasWidth, canvasHeight);
@@ -844,13 +829,16 @@ void ofApp::mousePressed(int x, int y, int button) {
         tvStart = monitorDataList[monitorSelected].tvFirst;
         tvEnd = MIN(tvStart + monitorDataList[monitorSelected].tvNumber - 1, numberTVs);
     }
+    bool isFocused = false;
     for (int i = tvEnd; i >= tvStart; i--) {
         ofRectangle tvBounds(tvDataList[i-1].xPos, tvDataList[i-1].yPos, tvDataList[i-1].width, tvDataList[i-1].height);
         if (tvBounds.inside(xPos, yPos)){
             monitorDataList[monitorSelected].tvFocus = i;
+            isFocused = true;
             break;
         }
     }
+    if(!isFocused && !shiftPressed){monitorDataList[monitorSelected].tvFocus = 0;}
     lastMouseXPos = xPos - tvDataList[monitorDataList[monitorSelected].tvFocus-1].xPos;
     lastMouseYPos = yPos - tvDataList[monitorDataList[monitorSelected].tvFocus-1].yPos;
 }
