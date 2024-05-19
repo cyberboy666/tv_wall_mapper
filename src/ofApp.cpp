@@ -875,6 +875,7 @@ void ofApp::mousePressed(int x, int y, int button) {
         toggleFullscreen();
         return;
     }
+    if(button == 2){return;}
     if(hideMaptest){return;}
     ofRectangle fboBounds(600, 20, ofGetScreenWidth() / 3, ofGetScreenHeight() / 3);
     if (!fboBounds.inside(x, y)) {
