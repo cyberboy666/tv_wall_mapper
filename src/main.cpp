@@ -23,7 +23,7 @@ int main( ){
 
 	ofAppGLFWWindow* win;
     win = dynamic_cast<ofAppGLFWWindow *> (ofGetWindowPtr());
-    win->setWindowIcon("icon.png");
+	win->setWindowTitle("TV_WALL_MAPPER");
 
 	#if defined(TARGET_WIN32)
 		HICON hWindowIcon = NULL;
@@ -38,7 +38,7 @@ int main( ){
 		SendMessage (hwnd, WM_SETICON, ICON_SMALL, (LPARAM) hWindowIcon);
 		SendMessage (hwnd, WM_SETICON, ICON_BIG, (LPARAM) hWindowIconBig);
 	#elif defined(TARGET_LINUX)
-	win->setWindowTitle("TV_WALL_MAPPER");
+	win->setWindowIcon("icon.png");
 	#endif
 
 
