@@ -40,6 +40,22 @@ void ofApp::setup(){
 
     ofLog() << "this many monitors: " << monitorDataList.size();
 
+    if(monitorDataList.size() == 0){
+        monitorData thisMonitor;
+        thisMonitor.outputToMonitor = true;
+        thisMonitor.outputToNDI = false;
+        thisMonitor.isFullscreen = false;
+        thisMonitor.displayIndex = 0;
+        thisMonitor.tvNumber = 1;
+        thisMonitor.tvFirst = 1;
+        thisMonitor.tvLayout = "1";
+        monitorDataList.push_back(thisMonitor);
+    }
+    if(tvDataList.size() == 0){
+        tvData thisTv;
+        tvDataList.push_back(thisTv);
+    }
+
     if(useGLES){
         // only allowed one monitor in gles mode and dont allow output to monitor
         while(monitorDataList.size() > 1){
@@ -361,6 +377,7 @@ void ofApp::draw(){
 
         ImGui::InputInt("NUMBER OF TVS", &numberTVs);
         if(numberTVs < tvDataList.size()){
+            if(numberTVs <= 1){ numberTVs = 1;}
             for (int i = 0; i < tvDataList.size() - numberTVs; i++) {
                 tvDataList.pop_back();
             }

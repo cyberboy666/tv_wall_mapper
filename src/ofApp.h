@@ -61,7 +61,7 @@ class ofApp : public ofBaseApp{
     int inputWidth;
     int inputHeight;
     int framerate=30;
-    int numberTVs=9;
+    int numberTVs=1;
     int selectedInputIndex = 0;
     int canvasWidth=5000;
     int canvasHeight=5000;
@@ -110,7 +110,7 @@ class ofApp : public ofBaseApp{
         int xPos;
         int yPos;
 
-        tvData() : width(0), height(0), xPos(0), yPos(0) {}
+        tvData() : width(1000), height(1000), xPos(0), yPos(0) {}
     };
     vector<tvData> tvDataList;
 
