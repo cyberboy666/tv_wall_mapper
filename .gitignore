@@ -2,6 +2,9 @@
 .DS_Store
 Thumbs.db
 
+icon.rc
+.vs
+
 # Ignore everything in bin/
 bin/*
 
