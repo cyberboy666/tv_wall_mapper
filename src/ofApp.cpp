@@ -69,6 +69,7 @@ void ofApp::setup(){
         createMonitor(i);
     }
     loadInput();
+    createInputsAndOutputsList();
     loadShader(getLayoutIndex());
 
     if(numberMonitors == 1 && !monitorDataList[monitorSelected].outputToMonitor && monitorDataList[monitorSelected].isFullscreen){
@@ -84,6 +85,8 @@ void ofApp::createInputsAndOutputsList(){
     for (size_t i = 0; i < testcards.size(); i++)
     {
         inputType imageInput;
+        imageInput.width = inputWidth;
+        imageInput.height = inputHeight;
         imageInput.type = "TESTCARD";
         imageInput.typeId = i;
         imageInput.name = "TESTCARD_" + ofToString(i);
@@ -101,6 +104,14 @@ void ofApp::createInputsAndOutputsList(){
         if(devices[i].bAvailable && devices[i].deviceName.find("bcm2835-isp") ==  std::string::npos){
             //log the device
             inputType videoInput;
+            if(devices[i].formats.size() > 0){
+                videoInput.width = devices[i].formats[0].width;
+                videoInput.height = devices[i].formats[0].height;
+            }
+            else{
+                videoInput.width = inputWidth;
+                videoInput.height = inputHeight;
+            }
             videoInput.type = "VIDEO";
             videoInput.typeId = devices[i].id ;
             videoInput.name = "VIDEO_" + ofToString(devices[i].id) + " :" + devices[i].deviceName;
@@ -121,6 +132,8 @@ void ofApp::createInputsAndOutputsList(){
     ofLog() << "ndiReceiver.GetSenderCount(): " << ndiReceiver.GetSenderCount();
     for(int i = 0; i < nsenders; i++){
        inputType ndiInput;
+        ndiInput.width = inputWidth;
+        ndiInput.height = inputHeight;
         ndiInput.type = "NDI";
         ndiInput.typeId = i;
         ndiInput.name = "NDI_" + ofToString(i) + " : " + ndiReceiver.GetSenderName(i);
@@ -672,11 +685,13 @@ void ofApp::loadShader(int item_current){
 }
 
 void ofApp::loadInput(){
+    inputWidth = videoInputs[selectedInputIndex].width;
+    inputHeight = videoInputs[selectedInputIndex].height;
     if(videoInputs[selectedInputIndex].type == "VIDEO"){
         if(vidGrabber.isInitialized()){vidGrabber.close();}
         vidGrabber.setDesiredFrameRate(framerate);
         vidGrabber.setDeviceID(videoInputs[selectedInputIndex].typeId);
-        vidGrabber.initGrabber(inputWidth, inputHeight);
+        vidGrabber.setup(inputWidth, inputHeight);
     }
     else{vidGrabber.close();}
 
@@ -906,6 +921,10 @@ void ofApp::mousePressed(int x, int y, int button) {
 
 void ofApp::mouseDragged(int x, int y, int button) {
     if(hideMaptest){return;}
+    ofRectangle fboBounds(600, 20, ofGetScreenWidth() / 3, ofGetScreenHeight() / 3);
+    if (!fboBounds.inside(x, y)) {
+        return; 
+        }
     float xPos = static_cast<float>(x - 600) / (ofGetScreenWidth() / 3) * canvasWidth;
     float yPos = static_cast<float>(y - 20) / (ofGetScreenHeight() / 3) * canvasHeight;
 

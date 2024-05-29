@@ -123,6 +123,8 @@ class ofApp : public ofBaseApp{
         string type;
         int typeId;
         string name;
+        int width;
+        int height;
     };
 
     vector<inputType> videoInputs;
