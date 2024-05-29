@@ -1,6 +1,9 @@
 # Ignore OS-specific files
 .DS_Store
 Thumbs.db
+openFrameworks-Info.plist
+of.entitlements
+Project.xcconfig
 
 icon.rc
 .vs
