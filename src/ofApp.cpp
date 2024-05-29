@@ -69,6 +69,7 @@ void ofApp::setup(){
         createMonitor(i);
     }
     loadInput();
+    createInputsAndOutputsList();
     loadShader(getLayoutIndex());
 
     if(numberMonitors == 1 && !monitorDataList[monitorSelected].outputToMonitor && monitorDataList[monitorSelected].isFullscreen){
