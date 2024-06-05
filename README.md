@@ -2,7 +2,7 @@
 
 _an open-source cross-platform application for creating synchronized tv wall instalations_
 
-![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/5499d3b5-02f3-4f8a-86ec-339c9422d5fc)
+![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/c92391b6-5b20-4313-99b3-b30fac11a27d)
 
 - this software is distributed by __UNDERSCORES__ - compiled downloads for linux, windows, mac and arm64 are available to purchase from underscores.shop [put link to shop page here]
 - the source code can be viewed [here](/src/)
@@ -10,7 +10,7 @@ _an open-source cross-platform application for creating synchronized tv wall ins
 
 ## background
 
-this application was originally written for an installation i worked on for __the dojo stage__ at [Twisted Frequency Festival](https://twistedfrequency.nz/) NYE 2023. we used 8 recycled tvs, a cheap [aliexpress hdmi_controller](https://www.aliexpress.com/item/1005005643772042.html) and this software to achieve the _synchronized tv wall effect_ seen here:
+this application was originally written for an installation i worked on with __the dojo stage__ at [Twisted Frequency Festival](https://twistedfrequency.nz/) NYE 2023. we used 8 recycled tvs, a cheap [aliexpress hdmi_controller](https://www.aliexpress.com/item/1005005643772042.html) and this software to achieve the _synchronized tv wall effect_ seen here:
 
 ![tv_wall_gif](http://underscores.shop/wp-content/uploads/2024/02/tv_wall_gif_04.gif)
 
@@ -22,9 +22,13 @@ you can find some more background on this install and process here: [WORKS IN PR
 
 ## hardware options
 
+<details><summary>hardware options</summary>
+
 to achieve the _synchronized tv wall effect_ you need a seperate video output per tv in the wall. depending on the requirements of your installation there are a few different ways you can combine this software with hardware to achieve the desired results. feel free to [email me](mailto:tim@cyberboy666.com) if you would like individual consulting on this.
 
 ### using a computer with multiple display outputs
+
+![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/5a8784c8-75d2-4ceb-b22e-aa63f8e5e471)
 
 if you only need to map a few tvs or have graphics cards that allow multiple display outputs this can be the simplest way to achieve the effect
 
@@ -44,6 +48,9 @@ pros/cons of this __hardware option__:
 - it is likely to need to convert signals if using tv's without display ports etc...
 
 ### using cheap Aliexpress TV Video wall Controllers
+
+![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/2fbe86ad-6029-4433-ae10-f51f5b6afee5)
+
 
 you can buy quite affordable off-the-shelf hardware for taking a single HDMI video input and splitting this into a grid of multiple HDMI video outputs. although there are many of these the only ones i personally have tested look like this:
 
@@ -68,6 +75,8 @@ pros/cons of this __hardware option__:
 
 ### using a cheap sbc per tv and a network switch
 
+![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/01f658c7-1730-41ee-9a11-3a509efe5165)
+
 _NOTE: this method is untested by me but in theory should work_
 
 since the __tv_wall_mapper__ software supports sending and recieving _network video_ over [NDI](https://ndi.video/tools/) another option would be to install a _Single Board Computer_ (such as a raspberry pi) to each tv in the wall - then that SBC can run the mapping software, recieve the source video over NDI and output the mapped video directly to the tv.
@@ -88,5 +97,30 @@ __(big) if i confirm this runs ok__ this could be a viable alternative to the __
 - is cheap enough to buy multiple (6x tvs = only __120euros__ on hardware)
 - they have rj45 ethernet ports built in
 - can output multiple video formats (including potentially composite video) - meaning you may save on signal converters
+- ethernet cables cheaper / longer than HDMI cables
 - possible to add PoE to these to save on power cabling
 - can reuse the SBC for more other tasks than a hardware controller
+
+to set the __tv_wall_mapper__ app to work for this hardware arrangement you can first create the mapping:
+
+- and then set `NUMBER OF MONITORS` to `1` and `TV LAYOUT` to `1`
+- then the same config file can be copied across all the SBCs - you can find all the settings stored as human readable JSON file in `bin/data/config.json`
+- the only setting that needs to change between the SBCs is `FIRST TV ON OUTPUT:` = whichever tv this SBC is connecting to
+
+</details>
+
+## how to use this app
+
+<details><summary>how to use this app</summary>
+
+
+
+</details>
+
+## how to install from source
+
+<details><summary>how to install from source</summary>
+
+
+
+</details>
