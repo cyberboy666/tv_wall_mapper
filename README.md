@@ -113,11 +113,23 @@ to set the __tv_wall_mapper__ app to work for this hardware arrangement you can 
 
 <details><summary>how to use this app</summary>
 
-start by setting the `NUMBER OF TVS` to match your install.
+### inputing source video
+
+__tv_wall_mapper__ app can take input source from video devices on your computer (such as webcams and external capture cards)
+
+if you have the [NDI SDKs installed](https://ndi.video/for-developers/ndi-sdk/download/) it will also be able to take input source from NDI
+
+many programs for creating video such as resolume and touchdesigner can output to NDI (and to VIRTUAL CAMERA) giving you options for linking with __tv_wall_mapper__
+
+if you are unsure where you will be getting source video from a good program to start with is [OBS](https://obsproject.com/download) - this can play videos, screencapture and much more plus can output to VIRTUAL CAMERA with __obs virtual cam__ and to NDI with [OBS NDI plugin](https://obsproject.com/forum/resources/obs-ndi-newtek-ndi%E2%84%A2-integration-into-obs-studio.528/) installed.
+
+_NOTE: currently there is a [known bug](https://github.com/cyberboy666/tv_wall_mapper/issues/1) where windows version of __tv_wall_mapper__ crashes when taking input from __obs virtual cam__ - if you want to input source from obs on windows you will need to use NDI_
 
 ### creating _the map_
 
 _the map_ is how you input where the tvs are placed relative to each other so that the software can correctly crop the image required for each one.
+
+start by setting the `NUMBER OF TVS` to match your install.
 
 after you have physically set up your tvs you will need to take some measurements with a _tape measure_:
 
@@ -194,7 +206,7 @@ OTHER KEYBOARD SHORTCUTS:
 
 <details><summary>how to install from source</summary>
 
-you can support this project by buying compiled versions of this app from underscores.shop [put link to shop page here]
+you can support this project by buying compiled versions of this app from underscores.shop [put link to shop page here] - with a compiled version you only need to download & unzip a folder, then just run the app - no installing required!
 
 you can also install and compile it yourself from the source code and instructions provided below. if this software is useful to you consider giving back by [donating](https://opencollective.com/underscores/donate) or contributing in other ways.
 
