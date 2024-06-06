@@ -8,6 +8,14 @@ _an open-source cross-platform application for creating synchronized tv wall ins
 - the source code can be viewed [here](/src/)
 - consider [donating](https://opencollective.com/underscores) to the underscores project to help us continue creating for the commons
 
+## features
+
+- _input video_ from connected devices (webcams, capture cards etc) or over NDI
+- _output video_ across multiple monitors, in grids for tv wall controllers and over NDI for differnet hardware setups
+- create _tv wall mapping_ using measurements, mouse, keyboard or directly editing human readable config.json
+- runs on linux, windows, mac and sbc's such as raspberry and orange pi's
+- code is open-source so you can modify it / add features that suit your needs
+
 ## background
 
 this application was originally written for an installation i worked on with __the dojo stage__ at [Twisted Frequency Festival](https://twistedfrequency.nz/) NYE 2023. we used 8 recycled tvs, a cheap [aliexpress hdmi_controller](https://www.aliexpress.com/item/1005005643772042.html) and this software to achieve the _synchronized tv wall effect_ seen here:
