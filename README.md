@@ -194,6 +194,163 @@ OTHER KEYBOARD SHORTCUTS:
 
 <details><summary>how to install from source</summary>
 
+you can support this project by buying compiled versions of this app from underscores.shop [put link to shop page here]
+
+you can also install and compile it yourself from the source code and instructions provided below. if this software is useful to you consider giving back by [donating](https://opencollective.com/underscores/donate) or contributing in other ways.
+
+the app has been tested on:
+
+- linux (pop_os, ubuntu, debian & xubuntu)
+- windows 10
+- mac_os Monterey (intel) - currently untested on ARM
+- raspberry_pi_4 running _raspios-bookworm-arm64_
+- orange_pi_5 running _debian_
+
+this code is written in [openFrameworks](https://openframeworks.cc/) - an open source cpp library for creative coding. for the most part you can followw their [install instructions](https://openframeworks.cc/download/) for your chosen platform.
+
+### install on linux:
+
+- install and compile __openFrameworks12__ - in a terminal:
+
+```
+cd ~
+wget https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_linux64gcc6_release.tar.gz
+mkdir openframeworks
+tar vxfz of_v0.12.0_linux64gcc6_release.tar.gz -C openframeworks --strip-components 1
+cd openframeworks/scripts/linux/<YOUR DISTRIBUTION HERE>/
+sudo ./install_dependencies.sh -y
+make Release -C ~/openframeworks/libs/openFrameworksCompiled/project
+```
+
+- install NDI SDK (if using NDI - recommended):
+
+download [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) and unzip: `NDI SDK for Linux`
+
+then copy the sdk into usr/lib: `sudo cp ~/NDI\ SDK\ for\ Linux/lib/x86_64-linux-gnu/* /usr/lib/`
+
+- download __tv_wall_mapper__ and dependanices:
+
+```
+<INSTALL GIT IF YOU DO NOT HAVE IT>
+cd ~/openframeworks/apps/myApps
+git clone git@github.com:cyberboy666/tv_wall_mapper.git
+cd tv_wall_mapper
+./install_addons.sh
+make
+```
+
+now it is compiled can run with `make run` or with `./bin/tv_wall_mapper`
+
+### install on windows 10
+
+follow the [openframeworks visual studio](https://openframeworks.cc/setup/vs/) guide:
+
+- download [visual studio community 2019](https://www.visualstudio.com/thank-you-downloading-visual-studio/?sku=Community&rel=16) and install with _desktop development with c++_ plus other settings as listed on that oF page
+
+install openframeworks and tv_wall_mapper:
+
+- download and install [git for windows](https://gitforwindows.org/)
+- download and unzip [openframeworks 12 for visual studio](https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_vs_release.zip)
+- open up `git bash` and navigate to the openframeworks folder:
+
+```
+cd ~/path/to/of12_folder/
+cd apps/myApps/
+git clone git@github.com:cyberboy666/tv_wall_mapper.git
+cd tv_wall_mapper
+./install_addons.sh
+```
+
+install NDI SDK (if using NDI - recommended)
+
+- download the [sdk](https://ndi.video/for-developers/ndi-sdk/download/)
+- you may need to copy `Processing.NDI.Lib.x64.dll` from here into `tv_wall_mapper/bin` if it doesnt load automatically
+
+build __tv_wall_mapper__ app:
+
+- open the openframeworks __ProjectGenerator__ in top level of openframeworks folder
+- from here import the __tv_wall_mapper__ folder and generate project
+- now you can open the project in _visual studio_ with the file `tv_wall_mapper.sln`
+- inside _visual studio_ find __BUILD__ / __RUN__  
+
+### install on mac_os
+
+follow the [openframeworks xcode](https://openframeworks.cc/setup/xcode/) guide:
+
+- download xcode (14.1 or later) + Xcode's command line tools... (check internet archive if you can not access apple store)
+- download and unzip [openframeworks 12 for xcode](https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_osx_release.zip)
+- open up terminal and navigate to the openframeworks folder:
+
+```
+cd ~/path/to/openframeworks
+cd apps/myApps/
+git clone git@github.com:cyberboy666/tv_wall_mapper.git
+cd tv_wall_mapper
+./install_addons.sh
+```
+
+install NDI SDK (if using NDI - recommended)
+
+- download the [sdk](https://ndi.video/for-developers/ndi-sdk/download/)
+
+build __tv_wall_mapper__ app:
+
+- open the openframeworks __ProjectGenerator__ in top level of openframeworks folder
+- from here import the __tv_wall_mapper__ folder and generate project
+- now you can open the project in _xcode_ with the file `Project.xcconfig`
+- inside _xcode_ find __BUILD__ / __RUN__  
+
+### install on raspberry_pi_4 or similar arm64:
+
+- download the the raspberry pi os image: `2024-03-15-raspios-bookworm-arm64.img.xz` and flash to the sd card
+- once the rpi is booted / connected to internet etc then you can download openframeworks:
+
+```
+cd ~
+wget https://github.com/openframeworks/openFrameworks/releases/download/0.12.0/of_v0.12.0_linuxaarch64_release.tar.gz
+mkdir openframeworks
+tar vxfz of_v0.12.0_linuxaarch64_release.tar.gz -C openframeworks --strip-components 1
+cd openframeworks/scripts/linux/debian/
+sudo ./install_dependencies.sh -y
+make Release -C ~/openframeworks/libs/openFrameworksCompiled/project
+``` 
+
+- install NDI SDK (if using NDI - recommended):
+
+download [NDI SDK](https://ndi.video/for-developers/ndi-sdk/download/) and unzip: `NDI SDK for Linux`
+
+then copy the sdk into usr/lib: `sudo cp ~/NDI\ SDK\ for\ Linux/lib/aarch64-rpi4-linux-gnueabi/* /usr/lib/`
+
+- download __tv_wall_mapper__ and dependanices:
+
+```
+<INSTALL GIT IF YOU DO NOT HAVE IT>
+cd ~/openframeworks/apps/myApps
+git clone git@github.com:cyberboy666/tv_wall_mapper.git
+cd tv_wall_mapper
+./install_addons.sh
+```
+
+__TURN ON FLAG TO COMPILE FOR GLES__
+
+since openframeworks12 on rpi doesnt work rn with standard glsl we need to switch to using GLES - this limits the program to only having one window so it can not be used with multiple display outputs
+
+```
+cd cd ~/openframeworks/apps/myApps/tv_wall_mapper
+nano src/ofApp.h
+```
+
+and UNCOMMENT LINE 9:
+```
+#define PROJECT_TARGET_OPENGLES
+```
+and save (`CTRL+X`, `Y`, `ENTER`) - now compile the program:
+
+```
+make
+```
+
+now it is compiled can run with `make run` or with `./bin/tv_wall_mapper`
 
 
 </details>
