@@ -113,7 +113,80 @@ to set the __tv_wall_mapper__ app to work for this hardware arrangement you can 
 
 <details><summary>how to use this app</summary>
 
+start by setting the `NUMBER OF TVS` to match your install.
 
+### creating _the map_
+
+_the map_ is how you input where the tvs are placed relative to each other so that the software can correctly crop the image required for each one.
+
+after you have physically set up your tvs you will need to take some measurements with a _tape measure_:
+
+- __canvas width__ and __canvas height__ is the total size of the space that the video is being mapped onto - if you imagine that the tv_wall is one big screen (with gaps between the tvs) then this is the size of that screen. a good place to start is to imagine the `X AXIS` as the horizontal line running across from the top-most pixel of the installation, and the `Y AXIS` as the vertical line running up from left most pixel of the installation
+
+- you can also measure and enter the `TV I WIDTH` and `TV I HEIGHT` for each tv found under `TV VALUES` heading if you click on the `TV I`
+
+- finally you can measure the `TV I X POS` - the distance from `Y AXIS` to first pixel on _tv i_, and `TV I Y POS` - the distance from `X AXIS` to first pixel on _tv i_
+
+_NOTE: the position measurements do not need to be exact - this will likely be adjusted slightly - its more important to get good width/height measurements so the ratios are correct_
+
+![Screenshot from 2024-06-06 09-09-23](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/5e7b8730-aaae-48e3-8ea8-d602008280d8)
+
+once these are entered the __MAPTEST__ view in the app - black box with blue/red squares representing tvs - should be looking like your tv wall
+
+- if you select __testcard 01__ from `VIDEO SOURCE` and the monitor settings are correct you should now see a test card being spread out over the tvs in the wall. small adjustments so size/position can be made here so lines appear to line up between tvs.
+
+### controls for adjusting the map
+
+this info can be seen in the app by clicking the `HELP` tab at top of the interface:
+
+MAPPING WITH A MOUSE:
+- CLICK on a TV to select it (RED is selected)
+- CLICK and drag a TV to position
+- hold SHIFT and drag to resize it
+- or RIGHT CLICK and drag to resize it
+MAPPING WITH A KEYBOARD:
+- press ALT plus LEFT/RIGHT to select a TV
+- press ARROW KEYS to position it
+- press SHIFT plus ARROW KEYS to resize it
+- press ALT plus UP/DOWN to set grid size (how much each press moves)
+- NOTE: TVs with width less than height are automatically rotated
+- NOTE: resizing can be negative to support all possible orientations
+OTHER KEYBOARD SHORTCUTS:
+- press F to toggle ON/OFF FULLSCREEN
+- press R to toggle ON/OFF FPS ON OUTPUT
+
+### info about every setting in the interface:
+
+- __HELP__ - this opens/closes info about mapping controls
+- __save config__ - saves the current config to a json file (located at `bin/data/config.json`)
+- __load config__ - loads the config from the file at `bin/data/config.json`
+- __refresh inputs/outputs__ - this checks for any new `VIDEO SOURCE` or `MONITOR DISPLAY`s since the app started - useful if you hotplug a capture card or new monitor
+- __VIDEO SOURCE__ - select where the source video is coming from - can take input from cameras/capture cards or from a NDI source
+- _INPUT RESOLUTION_ - this displays the source resolution - usually it will match the monitor or a resolution that `VIDEO SOURCE` supports
+- __NUMBER OF TVS__ - set the amount of tvs being used in the tv wall
+- __HIDE MAPTEST__ - removes the MAPTEST - box showing the mapping - from the interface
+- __HIDE PREVIEW__ - removes the PREVIEW - box showing video output - from the interface
+- __OVERWRITE DEFAULTS__ - lets you play around with `INPUT WIDTH`, `INPUT HEIGHT` and `FRAMERATE` on the __video source__ - could be useful if having performance issues
+- __NUMBER OF MONITORS__ - sets the amount of seperate windows this app should create - allowing you to map different parts of input source to different __displays__ - see _using a computer with multiple display outputs_ in __hardware options__ for more info
+- __MONITOR 0 | MONITOR 1 | ...__ - lets you toggle between the different monitor outputs so they can be configured seperately (ie it is possible that one monitor will be going to a 2x2 video wall so needs `TV LAYOUT: 2x2` but another is going straight to a tv so needs `TV LAYOUT: 1` )
+- __only show tvs for this monitor__ - toggle whether all tvs are shown in the MAPTEST or filter them only for this monitor
+- __OUTPUT TO MONITOR__ - toggle whether this monitor should have a window showing its output
+- __OUTPUT TO NDI__ - toggle whether this monitor should output its content to NDI (useful if sending video over network rather than HDMI)
+- __MONITOR DISPLAY__ - select which connected display this monitor should output to
+- __monitor fullscreen__ - toggles this monitors window to being fullscreen - fullscreen is needed for tv wall effect but it could be easier when setting things up to havee it windowed
+- __show framerate__ - outputs the framerate of the app to this monitor - could be useful when testing that the tv wall is responsive enough
+-  __TV LAYOUT__ - use this setting when the monitor is outputing to a __tv wall controller__ so multiple tv images are sent in `2x2` or `3x3` grid (see _using cheap Aliexpress TV Video wall Controllers_ under __hardware options__)
+-  __NUMBER OF TVS ON OUTPUT__ - this should automatically update with __TV LAYOUT__ (ie `2x2` = 4, `3x3` = 9 etc) however could be useful if you are only mapping say 7 tvs from a 3x3 controller etc...
+-  __FIRST TV ON OUTPUT__ - this can be useful if you want to use the same mapping across multiple devices running __tv_wall_mapper_ app and just need to set which tv each one is mapping (see _using a cheap sbc per tv and a network switch_ under __hardware options__)
+-  __CANVAS WIDTH__ - this is the width of the "screen" that video is mapped onto - if the tv wall was one big screen
+-  __CANVAS HEIGHT__ - this is the height of the "screen" that video is mapped onto - if the tv wall was one big screen
+-  __SELECTED TV__ - this is the currently highlighted tv in MAPTEST (red) - the one that will be affected by key presses etc
+-  __GRID SIZE__ - this is the amount one key press will move the `SELECTED TV`
+-  __TV I__ - click on a __tv__ to see values for it:
+-  __TV I WIDTH__ - set the physical width of `TV I`
+-  __TV I HEIGHT__ - set the physical height of `TV I`
+-  __TV I X POS__ - set the distance from left most pixel to `Y AXIS`
+-  __TV I Y POS__ - set the distance from top most pixel to `X AXIS`
 
 </details>
 
