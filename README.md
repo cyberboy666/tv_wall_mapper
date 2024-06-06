@@ -1,6 +1,6 @@
 # tv_wall_mapper
 
-_an open-source cross-platform application for creating synchronized tv wall instalations_
+_an open-source cross-platform application for creating synchronized tv wall installation_
 
 ![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/c92391b6-5b20-4313-99b3-b30fac11a27d)
 
