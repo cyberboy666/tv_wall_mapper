@@ -690,7 +690,11 @@ void ofApp::loadInput(){
         if(vidGrabber.isInitialized()){vidGrabber.close();}
         vidGrabber.setDesiredFrameRate(framerate);
         vidGrabber.setDeviceID(videoInputs[selectedInputIndex].typeId);
-        vidGrabber.setup(inputWidth, inputHeight);
+        try {
+            vidGrabber.setup(inputWidth, inputHeight);
+        }
+        catch (...) { ofLog() << "failed to load input"; }
+        //vidGrabber.setup(inputWidth, inputHeight);
     }
     else{vidGrabber.close();}
 
