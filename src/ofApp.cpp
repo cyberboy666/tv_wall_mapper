@@ -611,15 +611,11 @@ void ofApp::draw(){
 
         ImGui::InputInt("FIRST TV ON OUTPUT", &monitorDataList[monitorSelected].tvFirst);
 
-        ImGui::InputInt("TV FOCUS", &monitorDataList[monitorSelected].tvFocus);
-
-
-
         ImGui::SeparatorText("CANVAS VALUES");
         ImGui::InputInt("CANVAS WIDTH (mm)", &canvasWidth);
         ImGui::InputInt("CANVAS HEIGHT (mm)", &canvasHeight);
 
-        ImGui::SeparatorText("CANVAS VALUES");
+        ImGui::SeparatorText("MAP VALUES");
 
         if(ImGui::InputInt("SELECTED TV", &monitorDataList[monitorSelected].tvFocus)){
             if(monitorDataList[monitorSelected].tvFocus > numberTVs){monitorDataList[monitorSelected].tvFocus = 0;}
