@@ -69,6 +69,7 @@ void ofApp::setup(){
         createMonitor(i);
     }
     loadInput();
+    createInputsAndOutputsList();
     loadShader(getLayoutIndex());
 
     if(numberMonitors == 1 && !monitorDataList[monitorSelected].outputToMonitor && monitorDataList[monitorSelected].isFullscreen){
@@ -98,6 +99,9 @@ void ofApp::createInputsAndOutputsList(){
     testMap.name = "TESTMAP";
     videoInputs.push_back(testMap);
 
+    #if defined(TARGET_OSX)
+    vidGrabber.setup(1,1,1); // needed to reset the video inputs
+    #endif
     vector<ofVideoDevice> devices = vidGrabber.listDevices();
     for(size_t i = 0; i < devices.size(); i++){
         if(devices[i].bAvailable && devices[i].deviceName.find("bcm2835-isp") ==  std::string::npos){
@@ -610,15 +614,11 @@ void ofApp::draw(){
 
         ImGui::InputInt("FIRST TV ON OUTPUT", &monitorDataList[monitorSelected].tvFirst);
 
-        ImGui::InputInt("TV FOCUS", &monitorDataList[monitorSelected].tvFocus);
-
-
-
         ImGui::SeparatorText("CANVAS VALUES");
         ImGui::InputInt("CANVAS WIDTH (mm)", &canvasWidth);
         ImGui::InputInt("CANVAS HEIGHT (mm)", &canvasHeight);
 
-        ImGui::SeparatorText("CANVAS VALUES");
+        ImGui::SeparatorText("MAP VALUES");
 
         if(ImGui::InputInt("SELECTED TV", &monitorDataList[monitorSelected].tvFocus)){
             if(monitorDataList[monitorSelected].tvFocus > numberTVs){monitorDataList[monitorSelected].tvFocus = 0;}
