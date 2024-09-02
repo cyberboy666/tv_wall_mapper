@@ -26,7 +26,8 @@ you can find some more background on this install and process here: [WORKS IN PR
 
 ## demo video
 
-[coming soon]
+[![image](https://github.com/user-attachments/assets/63b9cfb7-d90a-4333-a6af-f9968cab0976)](https://videos.scanlines.xyz/w/nzf8ufiVi2TpNdX8umKUT9)
+
 
 ## hardware options
 
