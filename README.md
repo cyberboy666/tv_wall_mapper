@@ -12,7 +12,7 @@ _an open-source cross-platform application for creating synchronized tv wall ins
 
 - _input video_ from connected devices (webcams, capture cards etc) or over [NDI](https://ndi.video/tools/)
 - _output video_ across multiple monitors, in grids for [tv wall controllers](https://www.aliexpress.com/item/1005006156950887.html) and over NDI for differnet hardware setups
-- create _tv wall mapping_ using measurements, mouse, keyboard or directly editing human readable config.json
+- create _tv wall mapping_ using measurements, mouse, keyboard or directly editing human readable `config.json`
 - runs on linux, windows, mac and sbc's such as raspberry and orange pi's
 - code is open-source so you can modify it / add features that suit your needs
 
