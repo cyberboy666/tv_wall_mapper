@@ -4,7 +4,7 @@ _an open-source cross-platform application for creating synchronized tv wall ins
 
 ![image](https://github.com/cyberboy666/tv_wall_mapper/assets/12017938/c92391b6-5b20-4313-99b3-b30fac11a27d)
 
-- this software is distributed by __UNDERSCORES__ - compiled downloads for linux, windows, mac and arm64 are available to purchase from underscores.shop [put link to shop page here]
+- this software is distributed by __UNDERSCORES__ - compiled downloads for linux, windows, mac and arm64 are available to purchase from [underscores.shop](https://underscores.shop/product/tv_wall_mapper/) 
 - the source code can be viewed and compiled from [here](/src/)
 - consider [donating](https://opencollective.com/underscores) to the underscores project to help us continue creating for the commons
 
